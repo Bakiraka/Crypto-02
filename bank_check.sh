@@ -16,7 +16,6 @@
 ####        the line to the right file                         ####
 ###################################################################
 
-#Getting the arguments
 check=$1
 
 clepubmerchant_ciphered=`cat $check | head -3 | tr -d '\n\r'`
@@ -36,9 +35,6 @@ clepubmerchant=`echo $clepubmerchant_ciphered | base64 --decode | openssl rsautl
 clepubclient_true=`openssl dgst -sha1 clientPk | cut -d' ' -f2`
 clepubmerchant_true=`openssl dgst -sha1 commercantPk | cut -d' ' -f2`
 
-#Vérification du XOR
-resultxor="$sum $uid $clepubmerchant"
-
 if [ "$clepubclient" != "$clepubclient_true" ] ; then
     echo cle publique client not good !
 fi
@@ -47,23 +43,30 @@ if [ "$clepubmerchant" != "$clepubmerchant_true" ] ; then
 fi
 somethingswrong=0
 #mercfirstchar=${clepubmerchant:0:40}
-mercfirstchar=`echo $clepubmerchant | head -c 10`
-if [ -e "${mercfirstchar}.sv"] ;
+echo clepubmerchant_true : $clepubmerchant_true
+mercfirstchar=`echo $clepubmerchant | head -c 20`
+echo mercfirstchar : $mercfirstchar
+echo clepubmerchant : $clepubmerchant
+if [ -e "${mercfirstchar}.sv" ] ;
 then
-    valeursaved=`cat "${mercfirstchar}.sv" | grep "$uid_true|$sum_true|$clepubmerchant"`
+    valeursaved=`cat "${mercfirstchar}.sv" | grep "$uid|$sum|$clepubmerchant"`
 fi
-if [ $valeursaved != "" ] ;
+if [ "$valeursaved" != "" ] ;
 then
-    echo "Le couple identifiant unique/clée de client dans ce chèque est reconnu comme déjà ayant été encaissé !"
+    echo "Le groupe UID/cléeclient/hashcléecommercant dans ce chèque est reconnu comme déjà ayant été encaissé !"
     somethingswrong=1
-fi
-if [ echo $valeur | tr '[|]' ' ' != resultxor]; then
-   echo "Le Xor n'est pas bon !"
-   somethingswrong=1
+else
+  dataspacecombi="$sum $uid $clepubmerchant_true"
+  dataspacecombiatester=echo $valeursaved | tr "\v" " "
+  # DEBUG # echo dataspacecombiatester : $dataspacecombiatester
+  if [ "$dataspacecombiatester" == "$dataspacecombi" ]; then
+     echo "Le Xor n'est pas bon !"
+     somethingswrong=1
+  fi
 fi
 
-if [somethingswrong == 0] ;
+if test $somethingswrong -eq 0 ;
 then
-  "$uid_true|$sum_true|$clepubmerchant">> "${mercfirstchar}.sv"
-  echo -e "ok !\n"
+  echo "$uid|$sum|$clepubmerchant" >> "${mercfirstchar}.sv"
+  echo -e "ok !"
 fi
