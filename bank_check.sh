@@ -46,20 +46,20 @@ if [ "$clepubmerchant" != "$clepubmerchant_true" ] ; then
     echo cle publique merchant not good !
 fi
 somethingswrong=0
-mercfirstchar=${clepubmerchant:0:40}
-#mercfirstchar = echo $clepubmerchant head -c 10
+#mercfirstchar=${clepubmerchant:0:40}
+mercfirstchar=`echo $clepubmerchant | head -c 10`
 if [ -e "${mercfirstchar}.sv"] ;
 then
-  valeursaved = `cat "${mercfirstchar}.sv" | grep "$uid_true|$sum_true|$clepubmerchant"`
-  if [ $valeursaved != "" ] ;
-  then
+    valeursaved=`cat "${mercfirstchar}.sv" | grep "$uid_true|$sum_true|$clepubmerchant"`
+fi
+if [ $valeursaved != "" ] ;
+then
     echo "Le couple identifiant unique/clée de client dans ce chèque est reconnu comme déjà ayant été encaissé !"
-    $somethingswrong = 1
-  fi
-  if [ echo $valeur | tr '[|]' ' ' != resultxor] then
-    echo "Le Xor n'est pas bon !"
-    $somethingswrong = 1
-  fi
+    somethingswrong=1
+fi
+if [ echo $valeur | tr '[|]' ' ' != resultxor]; then
+   echo "Le Xor n'est pas bon !"
+   somethingswrong=1
 fi
 
 if [somethingswrong == 0] ;
