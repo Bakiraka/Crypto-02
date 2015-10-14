@@ -9,10 +9,12 @@ marqueur="0000000000000"
 
 for i in $( cat $check ); do
     if [ "$i" = "$marqueur" ]; then
-	variable="$variable $cmp"    
+	variable="$variable $cmp"
     fi
 	cmp=$(( $cmp + 1 ))
 done
+echo check : $check
+echo variable : $variable
 csplit $check $variable > /dev/null
 clepubmerchant_ciphered=`cat xx00 | tr -d '\n\r'`
 clepubclient_ciphered=`cat xx01 | sed '1d' | tr -d '\n\r'`

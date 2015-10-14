@@ -15,4 +15,4 @@ echo commercantPkEncode : $commercantPkEncode
 resultxor="$montant $uid $factureTest"
 resultxorcrypt=`echo $resultxor | openssl dgst -sha1 | openssl rsautl -decrypt -raw -inkey clientSk | base64 `
 echo resultxorcrypt : $resultxorcrypt
-echo "$commercantPkEncode\n$marqueur\n$clientPKHash\n$marqueur\n$uidcrypt\n$marqueur\n$montantcrypt\n$marqueur\n$resultxorcrypt" > $2
+echo -e "$commercantPkEncode\n$marqueur\n$clientPKHash\n$marqueur\n$uidcrypt\n$marqueur\n$montantcrypt\n$marqueur\n$resultxorcrypt" > $2
