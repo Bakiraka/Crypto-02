@@ -1,25 +1,28 @@
 case "$1" in
+'')
+  printf "Pas d'arguments fournis, rien à faire.\n"
+    ;;
 '1')
   printf "Lancement de init.py...\n"
-  python3.4 init.py
+  ./init.sh
     ;;
 '2')
   printf "Lancement de merchant_generate_invoice.py...\n"
-  printf "Génération de 5 produits dans le fichier test_invoice..\n"
-  python3.4 merchant_generate_invoice.py test_invoice 5
+  printf "Génération du fichier test_invoice avec une somme de 50..\n"
+  ./merchant_generate_invoice.sh test_invoice 50
     ;;
 '3')
   printf "Lancement de generateCheck.py...\n"
   printf "Génération du chèque test_check...\n"
-  python3.4 generateCheck.py test_invoice test_check
+  ./createCheck.sh test_invoice test_check
     ;;
 '4')
   printf "Lancement de merchant_verif_invoice_n_check.py...\n"
   printf "Vérification du chèque de la part du marchand...\n"
-  python3.4 merchant_verif_invoice_n_check.py test_invoice test_check clientPk commercantPk
+  ./merchant_verif_check.sh test_invoice test_check
     ;;
 '5')
   printf "Lancement de bank_check.py...\n"
   printf "Encaissement du chèque par la banque...\n"
-  python3.4 bank_check.py test_check clientPk commercantPk
+  ./bank_check.sh test_check
 esac
