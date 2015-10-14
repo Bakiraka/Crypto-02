@@ -11,13 +11,13 @@ echo $uid_ciphered
 sum_ciphered=`cat $2 | head -12 | tail -3  | tr -d '\n\r'`
 echo $sum_ciphered
 xor_ciphered=`cat $2 | tail -3  | tr -d '\n\r'`
-uid=`echo $uid_ciphered | base64 --decode | openssl rsautl -verify -pubin -inkey clientPk `
+uid=`echo $uid_ciphered | base64 --decode | openssl rsautl -encrypt -raw -pubin -inkey clientPk `
 uid_true=`cat $facture | head -1`
 sum_true=`cat $facture | tail -1`
-sum=`echo $sum_ciphered | base64 --decode | openssl rsautl -verify -pubin -inkey clientPk`
-xor=`echo $xor_ciphered | base64 --decode | openssl rsautl -verify -pubin -inkey clientPk`
-clepubclient=`echo $clepubclient_ciphered | base64 --decode | openssl rsautl -pubin -verify -inkey banquePk`
-clepubmerchant=`echo $clepubmerchant_ciphered | base64 --decode | openssl rsautl -verify -pubin -inkey clientPk`
+sum=`echo $sum_ciphered | base64 --decode | openssl rsautl -encrypt -raw -pubin -inkey clientPk`
+xor=`echo $xor_ciphered | base64 --decode | openssl rsautl -encrypt -raw -pubin -inkey clientPk`
+clepubclient=`echo $clepubclient_ciphered | base64 --decode | openssl rsautl -pubin -encrypt -raw -inkey banquePk`
+clepubmerchant=`echo $clepubmerchant_ciphered | base64 --decode | openssl rsautl -encrypt -raw -pubin -inkey clientPk`
 clepubclient_true=`openssl dgst -sha1 clientPk | cut -d' ' -f2`
 clepubmerchant_true=`openssl dgst -sha1 commercantPk | cut -d' ' -f2`
 if [ "$uid" != "$uid_true" ] ; then
