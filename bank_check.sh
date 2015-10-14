@@ -16,6 +16,12 @@
 ####        the line to the right file                         ####
 ###################################################################
 
+#checking the arguments
+if test $# -lt 1
+then
+	echo "No amount for the invoice entered !"
+	exit 0
+fi
 check=$1
 
 clepubmerchant_ciphered=`cat $check | head -3 | tr -d '\n\r'`
