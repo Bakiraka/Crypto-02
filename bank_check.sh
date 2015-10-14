@@ -7,8 +7,8 @@
 ####    Output : Either that the check is fine or not          ####
 ####    How does a bank check if a check has been cashed       ####
 ####        or not ?                                           ####
-####    - Save a file with the 40 first number of each         ####
-####       merchant's key it encounters                        ####
+####    - Save a file with the 20 first number of the          ####
+####         merchant's key's hash it encounters in the check  ####
 ####     -> inside the file, puts on each line, the unique     ####
 ####      number the merchant has produced and the customer's  ####
 ####      key, separated by a space                            ####
@@ -24,6 +24,7 @@ then
 fi
 check=$1
 
+#Getting and deciphering the data in the check
 clepubmerchant_ciphered=`cat $check | head -3 | tr -d '\n\r'`
 echo $clepubmerchant_ciphered
 clepubclient_ciphered=`cat $check | head -6 | tail -3 | tr -d '\n\r'`
