@@ -47,6 +47,17 @@ echo clepubmerchant_true : $clepubmerchant_true
 mercfirstchar=`echo $clepubmerchant | head -c 20`
 echo mercfirstchar : $mercfirstchar
 echo clepubmerchant : $clepubmerchant
+
+#Vérification que les données chiffrées correspondent aux données originales
+dataspacecombi="$sum $uid $clepubmerchant_true"
+dataspacecombiatester=`echo $sum $uid $clepubmerchant | tr "\v" " " `
+echo dataspacecombi : $dataspacecombi
+echo dataspacecombiatester : $dataspacecombiatester # DEBUG #
+if [ "$dataspacecombiatester" != "$dataspacecombi" ]; then
+   echo "La combinaison n'est pas bonne !"
+   somethingswrong=1
+fi
+
 if [ -e "${mercfirstchar}.sv" ] ;
 then
     valeursaved=`cat "${mercfirstchar}.sv" | grep "$uid|$sum|$clepubmerchant"`
@@ -55,14 +66,6 @@ if [ "$valeursaved" != "" ] ;
 then
     echo "Le groupe UID/cléeclient/hashcléecommercant dans ce chèque est reconnu comme déjà ayant été encaissé !"
     somethingswrong=1
-else
-  dataspacecombi="$sum $uid $clepubmerchant_true"
-  dataspacecombiatester=echo $valeursaved | tr "\v" " "
-  # DEBUG # echo dataspacecombiatester : $dataspacecombiatester
-  if [ "$dataspacecombiatester" == "$dataspacecombi" ]; then
-     echo "Le Xor n'est pas bon !"
-     somethingswrong=1
-  fi
 fi
 
 if test $somethingswrong -eq 0 ;
