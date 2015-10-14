@@ -11,7 +11,7 @@ clientPKHash=`cat clientPkEncode`
 echo clientPkHash : $clientPKHash
 commercantPkEncode=`openssl dgst -sha1 commercantPk | cut -d' ' -f2 | openssl rsautl -decrypt -raw -inkey clientSk | base64`
 echo commercantPkEncode : $commercantPkEncode
-resultxor=$(( montant ^ uid ))
-resultxorcrypt=`echo $resultxor | openssl rsautl -decrypt -raw -inkey clientSk | base64 `
+resultxor="$montant $uid $commercantPkEncode"
+resultxorcrypt=`echo $resultxor | openssl dgst -sha1 | openssl rsautl -decrypt -raw -inkey clientSk | base64 `
 echo resultxorcrypt : $resultxorcrypt
 echo "$commercantPkEncode\n$clientPKHash\n$uidcrypt\n$montantcrypt\n$resultxorcrypt" > $2
