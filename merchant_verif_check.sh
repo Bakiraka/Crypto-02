@@ -13,8 +13,6 @@ for i in $( cat $check ); do
     fi
 	cmp=$(( $cmp + 1 ))
 done
-echo check : $check
-echo variable : $variable
 csplit $check $variable > /dev/null
 clepubmerchant_ciphered=`cat xx00 | tr -d '\n\r'`
 clepubclient_ciphered=`cat xx01 | sed '1d' | tr -d '\n\r'`
