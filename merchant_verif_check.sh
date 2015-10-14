@@ -2,15 +2,15 @@
 
 facture=$1
 check=$2
-clepubmerchant_ciphered=`cat $2 | head -3 | tr -d '\n\r'`
+clepubmerchant_ciphered=`cat $check | head -3 | tr -d '\n\r'`
 echo $clepubmerchant_ciphered
-clepubclient_ciphered=`cat $2 | head -6 | tail -3 | tr -d '\n\r'`
+clepubclient_ciphered=`cat $check | head -6 | tail -3 | tr -d '\n\r'`
 echo $clepubclient_ciphered
-uid_ciphered=`cat $2 | head -9 | tail -3  | tr -d '\n\r'`
+uid_ciphered=`cat $check | head -9 | tail -3  | tr -d '\n\r'`
 echo $uid_ciphered
-sum_ciphered=`cat $2 | head -12 | tail -3  | tr -d '\n\r'`
+sum_ciphered=`cat $check | head -12 | tail -3  | tr -d '\n\r'`
 echo $sum_ciphered
-xor_ciphered=`cat $2 | tail -3  | tr -d '\n\r'`
+xor_ciphered=`cat $check | tail -3  | tr -d '\n\r'`
 uid=`echo $uid_ciphered | base64 --decode | openssl rsautl -encrypt -raw -pubin -inkey clientPk `
 uid_true=`cat $facture | head -1`
 sum_true=`cat $facture | tail -1`
