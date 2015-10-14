@@ -28,13 +28,16 @@ echo $uid_ciphered
 sum_ciphered=`cat $2 | head -12 | tail -3  | tr -d '\n\r'`
 echo $sum_ciphered
 xor_ciphered=`cat $2 | tail -3  | tr -d '\n\r'`
-uid=`echo $uid_ciphered | base64 --decode | openssl rsautl -verify -pubin -inkey clientPk `
-sum=`echo $sum_ciphered | base64 --decode | openssl rsautl -verify -pubin -inkey clientPk`
-xor=`echo $xor_ciphered | base64 --decode | openssl rsautl -verify -pubin -inkey clientPk`
-clepubclient=`echo $clepubclient_ciphered | base64 --decode | openssl rsautl -pubin -verify -inkey banquePk`
-clepubmerchant=`echo $clepubmerchant_ciphered | base64 --decode | openssl rsautl -verify -pubin -inkey clientPk`
+uid=`echo $uid_ciphered | base64 --decode | openssl rsautl -encrypt -raw -pubin -inkey clientPk`
+sum=`echo $sum_ciphered | base64 --decode | openssl rsautl -encrypt -raw -pubin -inkey clientPk`
+xor=`echo $xor_ciphered | base64 --decode | openssl rsautl -encrypt -raw -pubin -inkey clientPk`
+clepubclient=`echo $clepubclient_ciphered | base64 --decode | openssl rsautl -pubin -encrypt -raw -inkey banquePk`
+clepubmerchant=`echo $clepubmerchant_ciphered | base64 --decode | openssl rsautl -encrypt -raw -pubin -inkey clientPk`
 clepubclient_true=`openssl dgst -sha1 clientPk | cut -d' ' -f2`
 clepubmerchant_true=`openssl dgst -sha1 commercantPk | cut -d' ' -f2`
+
+#Vérification du XOR
+resultxor = "$sum $uid $clepubmerchant"
 
 if [ "$clepubclient" != "$clepubclient_true" ] ; then
     echo cle publique client not good !
@@ -48,15 +51,20 @@ mercfirstchar = ${clepubmerchant:0:40}
 #mercfirstchar = echo $clepubmerchant head -c 10
 if [ -e "${mercfirstchar}.sv"] ;
 then
-  if [ `cat "${mercfirstchar}.sv" | grep "$uid_true|$sum_true"` != "" ] ;
+  valeursaved = `cat "${mercfirstchar}.sv" | grep "$uid_true|$sum_true|$clepubmerchant"`
+  if [ $valeursaved != "" ] ;
   then
     echo "Le couple identifiant unique/clée de client dans ce chèque est reconnu comme déjà ayant été encaissé !"
+    $somethingswrong = 1
+  fi
+  if [ echo $valeur | tr '[|]' ' ' != resultxor] then
+    echo "Le Xor n'est pas bon !"
     $somethingswrong = 1
   fi
 fi
 
 if [somethingswrong == 0] ;
-  then
-    "$uid_true|$sum_true">> "${mercfirstchar}.sv"
-    echo -e "ok !\n"
-  fi
+then
+  "$uid_true|$sum_true|$clepubmerchant">> "${mercfirstchar}.sv"
+  echo -e "ok !\n"
+fi
