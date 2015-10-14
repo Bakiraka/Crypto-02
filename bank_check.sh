@@ -25,15 +25,24 @@ fi
 check=$1
 
 #Getting and deciphering the data in the check
-clepubmerchant_ciphered=`cat $check | head -3 | tr -d '\n\r'`
-echo $clepubmerchant_ciphered
-clepubclient_ciphered=`cat $check | head -6 | tail -3 | tr -d '\n\r'`
-echo $clepubclient_ciphered
-uid_ciphered=`cat $check | head -9 | tail -3  | tr -d '\n\r'`
-echo $uid_ciphered
-sum_ciphered=`cat $check | head -12 | tail -3  | tr -d '\n\r'`
-echo $sum_ciphered
-xor_ciphered=`cat $check | tail -3  | tr -d '\n\r'`
+variable=""
+cmp=1
+cmpbefore=-1
+marqueur="0000000000000"
+
+for i in $( cat $check ); do
+    if [ "$i" = "$marqueur" ]; then
+	variable="$variable $cmp"    
+    fi
+	cmp=$(( $cmp + 1 ))
+done
+csplit $check $variable > /dev/null
+clepubmerchant_ciphered=`cat xx00 | tr -d '\n\r'`
+clepubclient_ciphered=`cat xx01 | sed '1d' | tr -d '\n\r'`
+uid_ciphered=`cat xx02 | sed '1d' | tr -d '\n\r'`
+sum_ciphered=`cat xx03 | sed '1d' | tr -d '\n\r'`
+xor_ciphered=`cat xx04 | sed '1d' | tr -d '\n\r'`
+rm -rf xx*
 uid=`echo $uid_ciphered | base64 --decode | openssl rsautl -encrypt -raw -pubin -inkey clientPk`
 sum=`echo $sum_ciphered | base64 --decode | openssl rsautl -encrypt -raw -pubin -inkey clientPk`
 xor=`echo $xor_ciphered | base64 --decode | openssl rsautl -encrypt -raw -pubin -inkey clientPk`
