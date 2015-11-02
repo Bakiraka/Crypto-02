@@ -25,4 +25,9 @@ case "$1" in
   printf "Lancement de bank_check.py...\n"
   printf "Encaissement du chèque par la banque...\n"
   ./bank_check.sh test_check
+    ;;
+'6')
+  printf "Suppression des fichiers générés...\n"
+  rm -f test_check test_invoice clientPk clientSk commercantPk commercantSk banquePk banqueSk clientPkEncode *.sv
+    ;;
 esac
