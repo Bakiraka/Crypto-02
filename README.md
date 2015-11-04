@@ -77,13 +77,13 @@ Quand la banque reçoit le chèque, la banque signera le chèque et le gardera e
   Sortie : fichier facture généré
   La facture est sous la forme :
   > uniqueid
-   produit1 prix1 quantitéproduit1
+  > produit1 prix1 quantitéproduit1
   > produit2 prix2 quantitéproduit2
   > sommedesprix
 
  **Lancement du programme :(Exemple)**
   ```
-  ./merchant_generate_invoice.sh <test_invoice> <numberofproducts>
+  ./merchant_generate_invoice.sh <test_invoice> <sum_products>
   ```
   L'unique id généré tente d'utiliser le générateur d'aléatoires fourni par le système d'exploitation.
   La fonction os.urandom() va par exemple chercher dans * /dev/urandom * sur un système unix.
@@ -94,9 +94,11 @@ Quand la banque reçoit le chèque, la banque signera le chèque et le gardera e
 
 Programme du client qui prend en paramètre la facture et va produire le chèque :
 ```  
-  Clé publique du commerçant chiffrée par le client
-  Clé publique du client chiffrée par la banque
-  Somme de la transaction et numéro unique chiffrés
+  Hash de la clé publique du commerçant chiffrée par le client
+  Hash de la clé publique du client chiffrée par la banque
+  Uid de la transaction chiffré par le client
+  Montant de la transaction chiffré par le client
+  Hash de l'uid, du montant et de la clé du commercant par le client
 ```
 
  **Lancement du programme :(Exemple)**
@@ -104,25 +106,30 @@ Programme du client qui prend en paramètre la facture et va produire le chèque
 python3.4 generateCheck.py <fileFacture> <fileOutCheck>
 ```
 
- 4. merchant_verif_invoice_n_check.py
-  Programme du marchand vérifiant si un chèque a ou non été modifié.
+ 4. merchant_verif_check.py
+  Programme du marchand vérifiant si un chèque a ou non été modifié :
+ ```
+	Verification des clés publiques du client et du commercant
+	Verification du montant et de l'uid de la facture
+	Verification du hash de la clé publique, l'uid et le montant de la facture
+ ```
   Paramètres :
   - fichier facture
   - chèque "signé" par le client
-  - clée publique du client
-  - clée publique du marchand
+  - clé publique du client
+  - clé publique du marchand
 
- **Sortie :**
- *Sur la sortie standard :* que le chèque est bon ou pas.
+ Sortie : Rien si le cheque est correct, le champ modifié si le cheque ne l'est pas
+ *Sur la sortie standard :* 
  **Lancement du programme :(Exemple)**
  ```
- ./merchant_verif_invoice_n_check.sh <test_invoice> <test_check> <clientPk> <commercantPk>
+ ./merchant_verif_check.sh <test_invoice> <test_check>
  ```
 
 5. bank_check.py
 
   Programme de la banque qui va encaisser un chèque.
-  Vérifie si un chèque a déjà été encaissé ou non.
+  Vérifie si un chèque est correct ou si il a déjà été encaissé ou non.
   Arguments :
   - fichier chèque
   - clée publique du client

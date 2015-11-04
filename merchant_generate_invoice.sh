@@ -3,7 +3,7 @@
 ####    Merchant program generating and invoice                ####
 ####    Arguments : Name of the invoice                        ####
 ####                invoice_sum in the invoice                 ####
-####    Output (in specified file) : Invoice generated				 ####
+####    Output (in specified file) : Invoice generated	       ####		####                                                           #### 
 ####    The invoice will be of the form :                      ####
 ####    unique id                                              ####
 ####    invoice_sum                                            ####
