@@ -15,7 +15,7 @@ Comment faire en sorte qu’une transaction commerciale grave à un chèque puis
 
 ##Traitement du problème
 
-Présomption de départ : le client doit avoir sa clé publique signée par la banque (par exemple à son adhésion à la banque)
+Présomption de départ : le client doit avoir sa clé publique signée par la banque (par exemple à son adhésion à la banque).
 
 La transaction se fait de façon active (échange entre les acteurs).
 
@@ -31,30 +31,11 @@ Quand la banque reçoit le chèque, la banque signera le chèque et le gardera e
 
 ----
 
-## Problèmes à résoudre
-1. Comment le commerce peut-il être sur que le client est bien de la banque qu’il indique ?
-
--> Signature de la clé publique du client par la banque, à la présentation du chèque, le commerce donc peut utiliser la clée publique de la banque pour vérifier l’appartenance du client à la banque
-
-2. Comment la banque peut-elle vérifier que le chèque que le commerce lui donne vient bien du client ?
-
--> La signature du chèque par le client
-
-3. Comment empêcher au commerce de faire une copie du chèque et ensuite la donner à la banque ?
-
--> Signature du chèque par la banque
-
-4. Comment empêcher la banque d’indiquer au commerce que le chèque a une valeur différente de ce que le commerce en attend ?
-
--> Cf. 2 : Le client aura vérifié également la somme et signé le chèque
-
-----
-
 ## Création d’une preuve de concept
 
->Langage utilisé : Bash
+>Langage utilisé : Bash/Sh
 
-5 programmes principaux :
+*5 programmes principaux :*
 
 1. Initialisation
   - Génération clé publique/privée banque
@@ -84,7 +65,7 @@ Quand la banque reçoit le chèque, la banque signera le chèque et le gardera e
 - Génération clé publique/privée commerçant
 - Chiffrer la clé publique du client avec la clé privée de la banque
 
-Lancement du programme (Exemple) : ./init.sh
+ **Lancement du programme :(Exemple)** ./init.sh
 
 
 2. merchant_generate_invoice.py
@@ -100,7 +81,7 @@ Lancement du programme (Exemple) : ./init.sh
   > produit2 prix2 quantitéproduit2
   > sommedesprix
 
-**Lancement du programme :(Exemple)**
+ **Lancement du programme :(Exemple)**
   ```
   ./merchant_generate_invoice.sh <test_invoice> <numberofproducts>
   ```
@@ -118,7 +99,7 @@ Programme du client qui prend en paramètre la facture et va produire le chèque
   Somme de la transaction et numéro unique chiffrés
 ```
 
-**Lancement du programme :(Exemple)**
+ **Lancement du programme :(Exemple)**
 ```
 python3.4 generateCheck.py <fileFacture> <fileOutCheck>
 ```
@@ -131,9 +112,9 @@ python3.4 generateCheck.py <fileFacture> <fileOutCheck>
   - clée publique du client
   - clée publique du marchand
 
-**Sortie :**
+ **Sortie :**
  *Sur la sortie standard :* que le chèque est bon ou pas.
-**Lancement du programme :(Exemple)**
+ **Lancement du programme :(Exemple)**
  ```
  ./merchant_verif_invoice_n_check.sh <test_invoice> <test_check> <clientPk> <commercantPk>
  ```
@@ -148,7 +129,7 @@ python3.4 generateCheck.py <fileFacture> <fileOutCheck>
   - clée publique du marchand
   Sortie : Une indication si le chèque a bien été encaissé ou non.
 
-**Lancement du programme :(Exemple)**
+ **Lancement du programme :(Exemple)**
   ```
   ./bank_check.sh <test_check> <clientPk> <commercantPk>
   ```
