@@ -65,10 +65,12 @@ Quand la banque reçoit le chèque, la banque signera le chèque et le gardera e
 - Génération clé publique/privée commerçant
 - Chiffrer la clé publique du client avec la clé privée de la banque
 
- **Lancement du programme :(Exemple)** ./init.sh
+ **Lancement du programme :**
+```
+ ./init.sh
+```
 
-
-2. merchant_generate_invoice.py
+2. merchant_generate_invoice.sh
 
   Programme du marchand générant une facture.
   Paramètres :
@@ -77,8 +79,6 @@ Quand la banque reçoit le chèque, la banque signera le chèque et le gardera e
   Sortie : fichier facture généré
   La facture est sous la forme :
   > uniqueid
-  > produit1 prix1 quantitéproduit1
-  > produit2 prix2 quantitéproduit2
   > sommedesprix
 
  **Lancement du programme :(Exemple)**
@@ -103,10 +103,10 @@ Programme du client qui prend en paramètre la facture et va produire le chèque
 
  **Lancement du programme :(Exemple)**
 ```
-python3.4 generateCheck.py <fileFacture> <fileOutCheck>
+./generateCheck.sh <fileFacture> <fileOutCheck>
 ```
 
- 4. merchant_verif_check.py
+ 4. merchant_verif_check.sh
   Programme du marchand vérifiant si un chèque a ou non été modifié :
  ```
 	Verification des clés publiques du client et du commercant
@@ -120,13 +120,13 @@ python3.4 generateCheck.py <fileFacture> <fileOutCheck>
   - clé publique du marchand
 
  Sortie : Rien si le cheque est correct, le champ modifié si le cheque ne l'est pas
- *Sur la sortie standard :* 
+ *Sur la sortie standard :*
  **Lancement du programme :(Exemple)**
  ```
  ./merchant_verif_check.sh <test_invoice> <test_check>
  ```
 
-5. bank_check.py
+5. bank_check.sh
 
   Programme de la banque qui va encaisser un chèque.
   Vérifie si un chèque est correct ou si il a déjà été encaissé ou non.
@@ -138,12 +138,19 @@ python3.4 generateCheck.py <fileFacture> <fileOutCheck>
 
  **Lancement du programme :(Exemple)**
   ```
-  ./bank_check.sh <test_check> <clientPk> <commercantPk>
+  ./bank_check.sh <test_check>
   ```
 
   Fonctionnement :
   La banque va utiliser les 40 premiers caractères de la clée publique du marchand pour faire un fichier d'historique. Elle va ainsi pouvoir vérifier rapidement dans ce fichier, l'existence ou non de l'id unique associé à la clée publique du client.
 
 ## Tests
-Pour tester le programme, lancer ./testapps.sh $ , avec $ le numéro du script a tester.
-Le numéro 6 sert à supprimer les fichiers crées lors de l'utilisation des scripts.
+Pour tester les scripts, lancer ./testapps.sh $ , avec $ le numéro du script a tester.
+
+Ceux-ci sont à lancer dans l'ordre, il est évident que la génération d'un chèque nécessitera une facture.
+
+Le script numéro 6 sert à supprimer les fichiers crées lors de l'utilisation des scripts (Clés, factures, chèques).
+
+## Scénarios
+
+Voir le fichier Scénarios.md pour ceux-ci.
