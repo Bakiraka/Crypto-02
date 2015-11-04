@@ -41,3 +41,9 @@ fi
 if [ "$clepubmerchant" != "$clepubmerchant_true" ] ; then
     echo cle publique merchant not good !
 fi
+
+contentnothash="$sum $uid $clepubmerchant_true"
+xor_true=`echo $contentnothash | openssl dgst -sha1`
+if [ "$xor" != "$xor_true" ] ; then
+    echo hash not good !
+fi
