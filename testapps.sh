@@ -12,7 +12,7 @@ case "$1" in
   ./merchant_generate_invoice.sh test_invoice 50
     ;;
 '3')
-  printf "Lancement de generateCheck.sh...\n"
+  printf "Lancement de createCheck.sh...\n"
   printf "Génération du chèque test_check...\n"
   ./createCheck.sh test_invoice test_check
     ;;
