@@ -19,11 +19,12 @@ Présomption de départ : le client doit avoir sa clé publique signée par la b
 
 La transaction se fait de façon active (échange entre les acteurs).
 
-Le chèque contient 4 informations principales :
- - Le chiffrement par le client de la clé publique du commerçant
- - Le chiffrement par la banque de la clé publique du client  
- - La somme de la transaction (en nombre entier)
- - Un numéro unique généré par le commerçant pour vérifier que le chèque ne soit pas copié par un client malveillant
+Le chèque contient 5 informations principales :
+ - Le chiffrement par le client de la clé publique du commerçant hashé
+ - Le chiffrement par la banque de la clé publique du client hashé 
+ - La somme de la transaction (en nombre entier) chiffré par le client
+ - Un numéro unique généré par le commerçant pour vérifier que le chèque ne soit pas copié par un client malveillant chiffré par le client
+ - Un hash de l'uid, la somme et la clé du commercant chiffré par le client
 
 Lors de la fin de la transaction, le commerçant aura le chèque vérifié avec la facture
 
@@ -49,7 +50,8 @@ Quand la banque reçoit le chèque, la banque signera le chèque et le gardera e
 3. Programme du client qui prend en paramètre la facture et va produire le chèque :
   - Clé publique du commerçant chiffrée par le client
   - Clé publique du client chiffrée par la banque
-  - Somme de la transaction et numéro unique chiffrés
+  - Somme de la transaction et numéro unique chiffrés par le client
+  - Hash de l'uid, la somme et la clé publique du commercant chiffré par le client
 4. Programme du commerçant : prend facture et le chèque et répond si c’est ok ou pas
   - Vérifie que les données du chèque n’ont pas été altérées par le client
 5. Programme de la banque : va prendre chèque et effectue la transaction (ou pas)
